@@ -37,7 +37,7 @@ app.post('/upload', upload.single('product'), (req, res) => {
     });
 });
 
-// Schema for Creating Products
+// Schema for creating products
 const Product = mongoose.model('Product', {
   id: {
     type: Number,
@@ -98,6 +98,23 @@ app.post('/addproduct', async (req, res) => {
     success: true,
     name: req.body.name,
   });
+});
+
+// Creating API for deleting products
+app.post('/removeproduct', async (req, res) => {
+  await Product.findOneAndDelete({id: req.body.id});
+  console.log('Removed');
+  res.json({
+    success: true,
+    name: req.body.name,
+  });
+});
+
+//Creating API for getting all products
+app.get('/allproducts', async(req, res) => {
+  let products = await Product.find({});
+  console.log('All products fetched');
+  res.send(products);
 });
 
 app.listen(port, (error) => {
