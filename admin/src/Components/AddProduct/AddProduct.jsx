@@ -17,7 +17,7 @@ const AddProduct = () => {
     }
 
     const changeHandler = (e) => {
-        setProductDetails({...productDetails,[e.target.name]:e.target.value})
+        setProductDetails({ ...productDetails, [e.target.name]: e.target.value })
     }
 
     const Add_Product = async () => {
@@ -33,9 +33,9 @@ const AddProduct = () => {
                 Accept: 'application/json',
             },
             body: formData,
-        }).then((res) => res.json()).then((data)=>{responseData = data}) 
+        }).then((res) => res.json()).then((data) => { responseData = data })
 
-        if (responseData.success){
+        if (responseData.success) {
             product.image = responseData.image_url;
             console.log(product);
             await fetch('https://e-commerce-backend-2ocm.onrender.com/addproduct', {
@@ -45,8 +45,8 @@ const AddProduct = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(product),
-            }).then((res)=>res.json()).then((data)=>{
-                data.success?alert('Product Added'):alert('Failed')
+            }).then((res) => res.json()).then((data) => {
+                data.success ? alert('Product Added') : alert('Failed')
             })
         }
     }
@@ -55,16 +55,16 @@ const AddProduct = () => {
         <div className="add-product">
             <div className="addproduct-itemfield">
                 <p>Product title</p>
-                <input value={productDetails.name} onChange={changeHandler} type="text" name="name" placeholder="Type here"/>
+                <input value={productDetails.name} onChange={changeHandler} type="text" name="name" placeholder="Type here" />
             </div>
             <div className="addproduct-price">
                 <div className="addproduct-itemfield">
                     <p>Price</p>
-                    <input value={productDetails.old_price} onChange={changeHandler} type="text" name="old_price" placeholder="Type here"/>
+                    <input value={productDetails.old_price} onChange={changeHandler} type="text" name="old_price" placeholder="Type here" />
                 </div>
                 <div className="addproduct-itemfield">
                     <p>Offer price</p>
-                    <input value={productDetails.new_price} onChange={changeHandler} type="text" name="new_price" placeholder="Type here"/>
+                    <input value={productDetails.new_price} onChange={changeHandler} type="text" name="new_price" placeholder="Type here" />
                 </div>
             </div>
             <div className="addproduct-itemfield">
@@ -77,11 +77,11 @@ const AddProduct = () => {
             </div>
             <div className="addproduct-itemfield">
                 <label htmlFor="file-input">
-                    <img src={image?URL.createObjectURL(image):upload_area} className="addproduct-thumbnail-img" alt="" />
+                    <img src={image ? URL.createObjectURL(image) : upload_area} className="addproduct-thumbnail-img" alt="" />
                 </label>
-                <input onChange={imageHandler} type="file" name="image" id="file-input" hidden/>
+                <input onChange={imageHandler} type="file" name="image" id="file-input" hidden />
             </div>
-            <button onClick={()=>{Add_Product()}} className="addproduct-btn">Add</button>
+            <button onClick={() => { Add_Product() }} className="addproduct-btn">Add</button>
         </div>
     )
 }

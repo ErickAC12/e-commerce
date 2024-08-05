@@ -8,7 +8,7 @@ const path = require("path");
 const cors = require("cors");
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: "*" }));
 
 // Database Connection
 mongoose.connect(process.env.REACT_APP_MONGODB_URI);
@@ -101,6 +101,58 @@ app.post("/addproduct", async (req, res) => {
     success: true,
     name: req.body.name,
   });
+});
+
+// Remove all products from database
+app.post("/removeallproducts", async (req, res) => {
+  await Product.deleteMany({});
+  console.log("Removed all");
+  res.json({
+    success: true,
+  });
+  console.log("Remove all");
+});
+
+// Add all the products
+app.post("/addallproducts", async (req, res) => {
+  const products = JSON.parse(req.body.products);
+  let responseData;
+  products.map(async (product) => {
+    let formData = new FormData();
+    formData.append("product", product[i].image);
+    await fetch("https://e-commerce-backend-2ocm.onrender.com/upload", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+      },
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        responseData = data;
+      });
+    if (responseData.success) {
+      product[i].image = responseData.image_url;
+      await fetch("https://e-commerce-backend-2ocm.onrender.com/addproduct", {
+        method: "POST",
+        body: JSON.stringify({
+          name: product[i].name,
+          image: product[i].image,
+          category: product[i].category,
+          new_price: product[i].new_price,
+          old_price: product[i].old_price,
+        }),
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+        },
+      });
+    }
+  });
+  res.json({
+    success: true,
+  });
+  console.log("Add all");
 });
 
 // Creating API for deleting products
